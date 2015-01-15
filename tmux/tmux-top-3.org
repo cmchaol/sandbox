@@ -1,0 +1,7 @@
+| top 3    | action       | results        |
+|----------+--------------+----------------|
+|          | split a pane |                |
+| Ctrl-b % |              | left and right |
+| Ctrl-b " |              | up and down    |
+| Ctrl-b x | close a pan  |                |
+|          |              |                |
