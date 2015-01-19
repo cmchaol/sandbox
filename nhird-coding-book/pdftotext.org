@@ -1,5 +1,7 @@
 * pdftotext
   
+
+
 ** man pdftotext
 
 pdftotext [options] [PDF-file [text-file]]
@@ -20,17 +22,42 @@ Options
     Keep the text in content stream order.  This is a hack which often "undoes" column formatting, etc.  Use of raw mode is no longer recommended.
 
 
-** example 01
+** source block 05, blank template, session, raw, sh
 
-#+NAME: the_pdf_path_block_template
+| step | goal                     | target           |
+|------+--------------------------+------------------|
+
+#+NAME:
 #+HEADERS: :session
+#+HEADERS: :results raw
 #+BEGIN_SRC sh
 
-the_dir_under_home="/tmpfs/sandbox/nhird-coding-book/"
 
-the_file_name="en_codedescribe.pdf"
+#+END_SRC
 
-the_pdf_path=$HOME$the_dir_under_home$the_file_name
+#+RESULTS:
+
+
+
+
+** source block 15, define pdf file name
+
+| step | goal                     | target           |
+|------+--------------------------+------------------|
+|      | define the pdf file name | the_pdf_filename |
+|      |                          |                  |
+|      | print the file name      |                  |
+
+#+NAME: the_pdf_name_block
+#+HEADERS: :session
+#+HEADERS: :results raw
+#+BEGIN_SRC sh
+
+
+the_pdf_filename="en_codedescribe.pdf"
+
+
+echo "\$the_pdf_filename is:" $the_pdf_filename
 
 # echo "the_dir_under_home is" $the_dir_under_home
 
@@ -38,62 +65,31 @@ the_pdf_path=$HOME$the_dir_under_home$the_file_name
 
 # echo "the_pdf_path is"  $the_pdf_path
 
-#+END_SRC
-
-
-
-#+NAME: the_pdf_path_block
-#+HEADERS: :session
-#+BEGIN_SRC sh
-
-the_dir_under_home="/tmpfs/sandbox/nhird-coding-book/"
-
-the_file_name="en_codedescribe.pdf"
-
-the_pdf_path=$HOME$the_dir_under_home$the_file_name
-
-# echo "the_dir_under_home is" $the_dir_under_home
-
-# echo "the_file_name is" $the_file_name
-
-#echo "the_pdf_path is"  $the_pdf_path
+# printf "The current directory, by default, through the command pwd, is: " ; pwd
 
 #+END_SRC
 
-#+RESULTS: the_pdf_path_block
+#+RESULTS: the_pdf_name_block
+$the_pdf_filename is: en_codedescribe.pdf
 
 
 
 
 
+
+** source block 17, extract raw text between page f, l through pdftotext
+#+NAME: raw_output
 #+HEADERS: :noweb yes
 #+HEADERS: :results raw
 #+HEADERS: :session
 #+BEGIN_SRC sh
+<<the_pdf_name_block>>
 
-<<the_pdf_path_block>>
-
-echo "the_pdf_path " $the_pdf_path
+pdftotext -f 1 -l 2 -raw $the_pdf_filename -
 #+END_SRC
 
-#+RESULTS:
-the_pdf_path  /home/c5766/tmpfs/sandbox/nhird-coding-book/en_codedescribe.pdf
-
-
-
-
-
-
-
-#+HEADERS: :noweb yes
-#+HEADERS: :results raw
-#+BEGIN_SRC sh
-<<the_pdf_path_block>>
-
-pdftotext -f 1 -l 2 -raw $the_pdf_path -
-#+END_SRC
-
-#+RESULTS:
+#+RESULTS: raw_output
+$the_pdf_filename is: en_codedescribe.pdf
 B-I
 目 錄
 第二部份：代碼說明
@@ -131,5 +127,25 @@ B-I
 
 
 
+    
 
+** source block 25, extract raw text between page f, l through pdftotext
+
+#+HEADERS: :noweb yes
+#+HEADERS: :results raw
+#+HEADERS: :session
+#+BEGIN_SRC sh
+<<the_pdf_name_block>>
+
+raw_test=$(pdftotext -f 1 -l 2 -raw $the_pdf_filename -)
+
+# echo $raw_test
+
+ echo ${raw_test//\(\.+\)}     
+
+#+END_SRC
+
+#+RESULTS:
+$the_pdf_filename is: en_codedescribe.pdf
+B-I 目 錄 第二部份：代碼說明 評鑑等級...................................................................................................B-1 特約類別...................................................................................................B-3 權屬別及型態別其代號與名稱...............................................................B-4 特約狀況碼...............................................................................................B-9 醫事人員類別.........................................................................................B-10 病床類別.................................................................................................B-11 地區代碼、名稱、分局及郵遞區號.....................................................B-13 案件分類.................................................................................................B-26 健保卡就醫序號（預防保健服務時程代碼）.....................................B-35 部分負擔代號及相關規定.....................................................................B-40 就醫科別及細分科.................................................................................B-49 診療科別.................................................................................................B-51 專科醫師代號、科別.............................................................................B-53 特定治療項目代號.................................................................................B-55 給付類別.................................................................................................B-64 處方調劑方式.........................................................................................B-65 B-II 不適用 TW_DRGS 案件特殊註記.......................................................B-66 住院醫令類別.........................................................................................B-67 住院醫令代碼.........................................................................................B-68 診療部位申報方式.................................................................................B-72 單位屬性代號.........................................................................................B-74 加退保別說明.........................................................................................B-76 身份別說明.............................................................................................B-77 全民健康保險重大傷病範圍.................................................................B-78 串檔說明.................................................................................................B-79 ※本譯碼簿僅供參考，資料描述或代碼說明資訊如有異動，請逕自中 央健康保險署網站（http://www.nhi.gov.tw/）查閱。 
 
