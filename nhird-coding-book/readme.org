@@ -6,8 +6,10 @@
 
 [[http://nhird.nhri.org.tw/date_02.htm]]
 
-| 第一部份 | 檔案格式及資料描述 | en_codeformat.pdf   |
-| 第二部份 | 代碼說明           | en_codedescribe.pdf |
+|          |                    | 描述      | 檔案                |
+|----------+--------------------+-----------+---------------------|
+| 第一部份 | 檔案格式及資料描述 | 檔案 欄位 | en_codeformat.pdf   |
+| 第二部份 | 代碼說明           | 欄位代碼  | en_codedescribe.pdf |
 
 ** 第一部份：檔案格式及資料描述
 
