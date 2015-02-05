@@ -162,11 +162,10 @@ pdftotext -f 1 -l 3 -raw -nopgbrk $the_pdf_filename -
 #+BEGIN_SRC sh
 <<the_pdf_name_block>>
 
-pdftotext -f 1 -l 3 -raw -nopgbrk $the_pdf_filename -
+# pdftotext -f 1 -l 3 -raw -nopgbrk $the_pdf_filename -
+ pdftotext -f 1 -l 3 -raw -nopgbrk $the_pdf_filename - | grep -E '[.]{5,} A-[0-9]{1,3}'
 
 #+END_SRC
-
-
     
 
 
