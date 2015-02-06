@@ -1071,9 +1071,10 @@ rm temporary_script_for_sed
 #+END_SRC
 
 
-** DONE source block A-0-29 table 3-column  sed 目 錄 第一部份：檔案格式及資料描述
-#+HEADERS: :results raw
+** DONE source block A-41
 
+
+#+HEADERS: :results raw
 #+HEADERS: :noweb yes
 #+HEADERS: :session
 #+BEGIN_SRC sh
@@ -1081,78 +1082,29 @@ rm temporary_script_for_sed
 
 # pdftotext -f 1 -l 3 -raw -nopgbrk $the_pdf_filename - | head
 
-# pdftotext -f 1 -l 5 -raw $the_pdf_filename - | grep -E 'A-[0-9]+$' | cut -d"-" -f2
 
-# pdftotext -f 1 -l 5 -raw $the_pdf_filename - | sed -nr 's:([^.]+)[.]{5,}[ ]?A-([0-9]+)$:|\1|\2|:p'
+cmc_f=1        # first page number to parse
 
+cmc_l=2        # last page number to parse
 
 echo "
 
- s:[.]{3,}:: 
- s:(.*)A-([0-9]{1,2}):\2 \1:
- s:（: :   
- s:）: :
- s:\[適用 : :
- s:([0-9]{2,3})～([0-9]{2,3})(.*): \1 \2:
- s:([0-9]{2,3})~([0-9]{2,3})(.*): \1 \2:
- s:([0-9]{2,3})( 年以後資料]):\1 105:
- s:([0-9]{2,3})( 年以前資料]):80 \1:
- s:[ ]{2,}: :gp
-
+:A-41:=
 
 " > temporary_script_for_sed
 
 # cat temporary_script_for_sed
 
-pdftotext -f 1 -l 3 -nopgbrk -raw $the_pdf_filename - | sed -nrf temporary_script_for_sed
+# pdftotext -f $cmc_f -l $cmc_l -nopgbrk -raw $the_pdf_filename - # | sed -rf temporary_script_for_sed
+
+# pdftotext -nopgbrk -raw $the_pdf_filename -  | sed -nf temporary_script_for_sed
+
+pdftotext -nopgbrk -raw $the_pdf_filename -  | sed -n '/A-43/='
 
 rm temporary_script_for_sed
 #+END_SRC
 
 #+RESULTS:
-|  1 | 醫事機構基本資料檔         | HOSB    |     |     |
-|  3 | 醫事機構副檔資料檔         | HOSX    |     |     |
-|  5 | 醫事機構服務項目檔         | HOX     |     |     |
-|  6 | 醫事機構診療科別明細檔     | DETA    |     |     |
-|  7 | 醫事機構病床主檔           | BED     |     |     |
-|  8 | 醫事人員基本資料檔         | PER     |     |     |
-|  9 | 專科醫師證書主檔           | DOC     |  86 | 100 |
-| 10 | 專科醫師證書主檔           | DOC     | 101 | 105 |
-| 12 | 醫事機構類別明細檔         | HOSTDTL |     |     |
-| 13 | 執業資料紀錄檔             | LIC     |     |     |
-| 14 | 重大傷病證明明細檔         | HV      |  85 |  93 |
-| 15 | 重大傷病證明明細檔         | HV      |  94 |  98 |
-| 16 | 重大傷病證明明細檔         | HV      |  99 | 100 |
-| 17 | 重大傷病證明明細檔         | HV      | 101 | 105 |
-| 18 | 門診費用申請總表主檔       | CT      |  80 | 100 |
-| 20 | 門診費用申請總表主檔       | CT      | 101 | 105 |
-| 22 | 住院費用申請總表主檔       | DT      |  80 | 100 |
-| 23 | 住院費用申請總表主檔       | DT      | 101 | 105 |
-| 25 | 門診處方及治療明細檔       | CD      |  86 |  92 |
-| 30 | 門診處方及治療明細檔       | CD      |  93 | 100 |
-| 35 | 門診處方及治療明細檔       | CD      | 101 | 105 |
-| 41 | 門診處方醫令明細檔         | OO      |  85 |  95 |
-| 43 | 門診處方醫令明細檔         | OO      |  96 | 100 |
-| 46 | 門診處方醫令明細檔         | OO      | 101 | 105 |
-| 50 | 住院醫療費用清單明細檔     | DD      |  85 |  92 |
-| 55 | 住院醫療費用清單明細檔     | DD      |  93 |  95 |
-| 60 | 住院醫療費用清單明細檔     | DD      |  96 | 100 |
-| 65 | 住院醫療費用清單明細檔     | DD      | 101 | 105 |
-| 71 | 住院醫療費用醫令清單明細檔 | DO      |  85 |  95 |
-| 72 | 住院醫療費用醫令清單明細檔 | DO      |  96 |  98 |
-| 74 | 住院醫療費用醫令清單明細檔 | DO      |  99 | 100 |
-| 76 | 住院醫療費用醫令清單明細檔 | DO      | 101 | 105 |
-| 79 | 特約藥局處方及調劑明細檔   | GD      |  85 |  87 |
-| 80 | 特約藥局處方及調劑明細檔   | GD      |  88 |  92 |
-| 82 | 特約藥局處方及調劑明細檔   | GD      |  93 |  98 |
-| 84 | 特約藥局處方及調劑明細檔   | GD      |  99 | 100 |
-| 86 | 特約藥局處方及調劑明細檔   | GD      | 101 | 105 |
-| 88 | 特約藥局處方調劑醫令檔     | GO      |  85 |  95 |
-| 89 | 特約藥局處方調劑醫令檔     | GO      |  96 | 100 |
-| 90 | 特約藥局處方調劑醫令檔     | GO      | 101 | 105 |
-| 91 | 物理治療所調劑明細檔       | GDD     |     |     |
-| 93 | 物理治療所調劑醫令檔       | GOO     |     |     |
-| 94 | 承保資料檔                 | ID      |  80 |  98 |
-| 96 | 承保資料檔                 | ID      |  99 | 105 |
-| 97 | 藥品主檔                   | DRUG    |     |     |
+28
+1836
 
