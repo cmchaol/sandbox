@@ -1254,6 +1254,23 @@ LineC
 
 * A-?? ~ A-??
 
+
+** DONE source block test
+
+#+HEADERS: :results raw
+#+HEADERS: :noweb yes
+#+HEADERS: :session
+#+BEGIN_SRC sh
+
+# failed, non-interactive
+
+awk '{print $1*$2}' -
+
+#+END_SRC
+
+#+RESULTS:
+
+
 ** DONE source block sed page A-??-??
 
 #+HEADERS: :results raw
@@ -1295,18 +1312,53 @@ rm temporary_script_for_sed
 #+END_SRC
 
 
-** DONE source block test
+
+** DONE source block awk page A-??-??
 
 #+HEADERS: :results raw
 #+HEADERS: :noweb yes
 #+HEADERS: :session
 #+BEGIN_SRC sh
 
-# failed, non-interactive
 
-awk '{print $1*$2}' -
+the_file=en_codeformat.txt
 
+A_f=20   # first page of A-?? to parse
+A_l=22   # last page of A-?? to parse
+
+echo "
+
+# /A-$A_f/,/A-$A_l/{print $0} # failed
+
+# !/[.]{3,}/ # && /A-$A_f/,/A-$A_l/ 
+  !/[.]{3,}/
+
+# /A-$A_f/,/A-$A_l/ !d
+
+" > temporary_script_for_awk
+
+
+cat $the_file | awk -f temporary_script_for_awk
+
+rm temporary_script_for_awk
 #+END_SRC
 
-#+RESULTS:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
