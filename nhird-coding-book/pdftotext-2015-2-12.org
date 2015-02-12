@@ -1,0 +1,1312 @@
+* pdftotext total
+
+** table of contents
+
+| source |                             |                        |
+|  block | content                     | block name             |
+|--------+-----------------------------+------------------------|
+|     05 | blank, sh, session, raw     |                        |
+|        |                             |                        |
+|     15 | define file name to process | the_pdf_name_block     |
+|        |                             | <<the_pdf_name_block>> |
+|        |                             |                        |
+|     17 | extract pdf content         |                        |
+|        |                             |                        |
+|        |                             |                        |
+|      A |                             |                        |
+|        |                             |                        |
+|        |                             |                        |
+
+
+** source block 05, blank template, session, raw, sh
+
+| step | goal                     | target           |
+|------+--------------------------+------------------|
+
+#+NAME:
+#+HEADERS: :session
+#+HEADERS: :results raw
+#+BEGIN_SRC sh
+
+
+#+END_SRC
+
+#+RESULTS:
+
+
+** source block 07, long variable assignment
+
+| step | goal                     | target           |
+|------+--------------------------+------------------|
+
+#+NAME:
+#+HEADERS: :session
+#+HEADERS: :results raw
+#+BEGIN_SRC sh
+
+test=$(printf 
+'1'
+2
+3
+)
+
+# echo $test 
+
+echo $test | sed -r 's/([0-9]) /\1 \n/g'
+
+test1=$(echo $test | sed -r 's/([0-9]) /\1 \n/g')
+
+echo 'test1 is' $test1
+
+#+END_SRC
+
+#+RESULTS:
+
+test1 is
+'1' 2 
+3
+test1 is '1' 2 3
+1 
+2 
+3
+test1 is 1 2 3
+1 
+2 
+3
+test1 is 1 2 3
+
+
+
+
+
+
+** DONE source block 15, define pdf file name #+NAME: the_pdf_name_block
+
+| step | goal                     | target           |
+|------+--------------------------+------------------|
+|      | define the pdf file name | the_pdf_filename |
+|      |                          |                  |
+|      | print the file name      |                  |
+
+#+NAME: the_pdf_name_block
+#+HEADERS: :session
+#+HEADERS: :results raw
+#+BEGIN_SRC sh
+
+
+ the_pdf_filename="en_codeformat.pdf"  #A
+# the_pdf_filename="en_codedescribe.pdf"  #B
+
+
+# echo
+
+# echo "\$the_pdf_filename is:" $the_pdf_filename
+
+# echo "the_dir_under_home is" $the_dir_under_home
+
+# echo "the_file_name is" $the_file_name
+
+# echo "the_pdf_path is"  $the_pdf_path
+
+# printf "The current directory, by default, through the command pwd, is: " ; pwd
+
+
+# pdftotext -nopgbrk -raw $the_pdf_filename test.txt # -  | sed -n '/A-43/='
+
+
+#+END_SRC
+
+
+
+
+
+
+** DONE source block 15, en_codeformat.txt, en_codedescribe.txt
+
+| step | goal              | target |
+|------+-------------------+--------|
+|      | pdftotext pdf txt |        |
+|      |                   |        |
+|      |                   |        |
+
+
+#+HEADERS: :session
+#+HEADERS: :results raw
+#+BEGIN_SRC sh
+
+
+# the_pdf_filename="en_codeformat.pdf"  #A
+# the_pdf_filename="en_codedescribe.pdf"  #B
+
+
+# echo
+
+# echo "\$the_pdf_filename is:" $the_pdf_filename
+
+# echo "the_dir_under_home is" $the_dir_under_home
+
+# echo "the_file_name is" $the_file_name
+
+# echo "the_pdf_path is"  $the_pdf_path
+
+# printf "The current directory, by default, through the command pwd, is: " ; pwd
+
+
+# pdftotext -nopgbrk -raw $the_pdf_filename test.txt # -  | sed -n '/A-43/='
+
+pdftotext -nopgbrk -raw en_codeformat.pdf en_codeformat.txt
+
+pdftotext -nopgbrk -raw en_codedescribe.pdf en_codedescribe.txt
+
+
+
+#+END_SRC
+
+
+
+
+
+
+
+** source block 17, extract raw text between page f, l through pdftotext
+
+#+NAME: raw_output
+#+HEADERS: :noweb yes
+#+HEADERS: :results raw
+#+HEADERS: :session
+#+BEGIN_SRC sh
+<<the_pdf_name_block>>
+
+pdftotext -f 1 -l 3 -raw -nopgbrk $the_pdf_filename -
+#+END_SRC
+
+
+    
+
+** source block 25, sed 
+
+#+HEADERS: :noweb yes
+#+HEADERS: :results raw
+#+HEADERS: :session
+#+BEGIN_SRC sh
+ <<the_pdf_name_block>>
+
+ raw_test=$(pdftotext -f 1 -l 2 -raw -nopgbrk $the_pdf_filename -)
+
+ echo $raw_test
+
+ echo $raw_test | sed -r 's/[.]{2,}/|/g' | sed -r 's/([0-9]+ )/\1\n/g'
+
+#+END_SRC
+
+   
+** source block A-0-10 目 錄 第一部份：檔案格式及資料描述 
+
+
+V.102-11 
+
+目 錄 
+
+第一部份：檔案格式及資料描述 
+
+| 醫事機構基本資料檔（HOSB）                            | A-1  |
+| 醫事機構副檔資料檔（HOSX）                            | A-3  |
+| 醫事機構服務項目檔（HOX）                             | A-5  |
+| 醫事機構診療科別明細檔（DETA）                        | A-6  |
+| 醫事機構病床主檔（BED）                               | A-7  |
+| 醫事人員基本資料檔（PER）                             | A-8  |
+| 專科醫師證書主檔（DOC）[適用 86～100 年資料]          | A-9  |
+| 專科醫師證書主檔（DOC）[適用 101 年以後資料]          | A-10 |
+| 評鑑資料檔（HOSP_GRAD）                               | A-11 |
+| 醫事機構類別明細檔（HOSTDTL）                         | A-12 |
+| 執業資料紀錄檔（LIC）                                 | A-13 |
+| 重大傷病證明明細檔（HV）[適用 85～93 年資料]          | A-14 |
+| 重大傷病證明明細檔（HV）[適用 94～98 年資料]          | A-15 |
+| 重大傷病證明明細檔（HV）[適用 99~100 年以後資料]      | A-16 |
+| 重大傷病證明明細檔（HV）[適用 101 年以後資料]         | A-17 |
+| 門診費用申請總表主檔（CT）[適用 100 年以前資料]       | A-18 |
+| 門診費用申請總表主檔（CT）[適用 101 年以後資料]       | A-20 |
+| 住院費用申請總表主檔（DT）[適用 100 年以前資料]       | A-22 |
+| 住院費用申請總表主檔（DT）[適用 101 年以後資料]       | A-23 |
+| 門診處方及治療明細檔（CD）[適用 86～92 年資料]        | A-25 |
+| 門診處方及治療明細檔（CD）[適用 93~100 年資料]        | A-30 |
+| 門診處方及治療明細檔（CD）[適用 101 年以後資料]       | A-35 |
+| 門診處方醫令明細檔（OO）[適用 85～95 年資料]          | A-41 |
+| 門診處方醫令明細檔（OO）[適用 96~100 年資料]          | A-43 |
+| 門診處方醫令明細檔（OO）[適用 101 年以後資料]         | A-46 |
+| 住院醫療費用清單明細檔（DD）[適用 85～92 年資料]      | A-50 |
+| 住院醫療費用清單明細檔（DD）[適用 93～95 年資料]      | A-55 |
+| 住院醫療費用清單明細檔（DD）[適用 96~100 年資料]      | A-60 |
+| 住院醫療費用清單明細檔（DD）[適用 101 年以後資料]     | A-65 |
+| 住院醫療費用醫令清單明細檔（DO）[適用 85～95 年資料]  | A-71 |
+| 住院醫療費用醫令清單明細檔（DO）[適用 96～98 年資料]  | A-72 |
+| 住院醫療費用醫令清單明細檔（DO）[適用 99~100 年資料]  | A-74 |
+| 住院醫療費用醫令清單明細檔（DO）[適用 101 年以後資料] | A-76 |
+| 特約藥局處方及調劑明細檔（GD）[適用 85～87 年資料]    | A-79 |
+| 特約藥局處方及調劑明細檔（GD）[適用 88～92 年資料]    | A-80 |
+| 特約藥局處方及調劑明細檔（GD）[適用 93～98 年資料]    | A-82 |
+| 特約藥局處方及調劑明細檔（GD）[適用 99~100 年資料]    | A-84 |
+| 特約藥局處方及調劑明細檔（GD）[適用 101 年以後資料]   | A-86 |
+| 特約藥局處方調劑醫令檔（GO）[適用 85～95 年資料]      | A-88 |
+| 特約藥局處方調劑醫令檔（GO）[適用 96~100 年資料]      | A-89 |
+| 特約藥局處方調劑醫令檔（GO）[適用 101 年以後資料]     | A-90 |
+| 物理治療所調劑明細檔（GDD）                           | A-91 |
+| 物理治療所調劑醫令檔（GOO）                           | A-93 |
+| 承保資料檔（ID）[適用 98 年以前資料]                  | A-94 |
+| 承保資料檔（ID）[適用 99 年以後資料]                  | A-96 |
+| 藥品主檔（DRUG）                                      | A-97 |
+
+※本譯碼簿僅供參考，資料描述或代碼說明資訊如有異動，請逕自全民健康保險 署網站（http://www.nhi.gov.tw/ ）查閱。
+
+
+
+#+NAME: raw_output
+#+HEADERS: :noweb yes
+#+HEADERS: :results raw
+#+HEADERS: :session
+#+BEGIN_SRC sh
+<<the_pdf_name_block>>
+
+# pdftotext -f 1 -l 3 -raw -nopgbrk $the_pdf_filename -
+
+raw_test=$(pdftotext -f 1 -l 3 -raw -nopgbrk $the_pdf_filename -)
+
+#  echo $raw_test
+#  echo $raw_test | sed -r 's/[.]{2,}/,/g'
+  echo $raw_test | sed -r 's/[.]{2,}/,/g' | sed -r 's/(A-[0-9]+ )/\1\n/g'
+
+#+END_SRC
+
+
+
+
+** DONE source block A-0-29 table 3-column  sed 目 錄 第一部份：檔案格式及資料描述
+#+HEADERS: :results raw
+
+#+HEADERS: :noweb yes
+#+HEADERS: :session
+#+BEGIN_SRC sh
+<<the_pdf_name_block>>
+
+# pdftotext -f 1 -l 3 -raw -nopgbrk $the_pdf_filename - | head
+
+# pdftotext -f 1 -l 5 -raw $the_pdf_filename - | grep -E 'A-[0-9]+$' | cut -d"-" -f2
+
+# pdftotext -f 1 -l 5 -raw $the_pdf_filename - | sed -nr 's:([^.]+)[.]{5,}[ ]?A-([0-9]+)$:|\1|\2|:p'
+
+
+echo "
+
+ s:[.]{3,}:: 
+ s:(.*)A-([0-9]{1,2}):\2 \1:
+ s:（: :   
+ s:）: :
+ s:\[適用 : :
+ s:([0-9]{2,3})～([0-9]{2,3})(.*): \1 \2:
+ s:([0-9]{2,3})~([0-9]{2,3})(.*): \1 \2:
+ s:([0-9]{2,3})( 年以後資料]):\1 105:
+ s:([0-9]{2,3})( 年以前資料]):80 \1:
+ s:[ ]{2,}: :gp
+
+
+" > temporary_script_for_sed
+
+# cat temporary_script_for_sed
+
+pdftotext -f 1 -l 3 -nopgbrk -raw $the_pdf_filename - | sed -nrf temporary_script_for_sed
+
+rm temporary_script_for_sed
+#+END_SRC
+
+#+RESULTS:
+|  1 | 醫事機構基本資料檔         | HOSB    |     |     |
+|  3 | 醫事機構副檔資料檔         | HOSX    |     |     |
+|  5 | 醫事機構服務項目檔         | HOX     |     |     |
+|  6 | 醫事機構診療科別明細檔     | DETA    |     |     |
+|  7 | 醫事機構病床主檔           | BED     |     |     |
+|  8 | 醫事人員基本資料檔         | PER     |     |     |
+|  9 | 專科醫師證書主檔           | DOC     |  86 | 100 |
+| 10 | 專科醫師證書主檔           | DOC     | 101 | 105 |
+| 12 | 醫事機構類別明細檔         | HOSTDTL |     |     |
+| 13 | 執業資料紀錄檔             | LIC     |     |     |
+| 14 | 重大傷病證明明細檔         | HV      |  85 |  93 |
+| 15 | 重大傷病證明明細檔         | HV      |  94 |  98 |
+| 16 | 重大傷病證明明細檔         | HV      |  99 | 100 |
+| 17 | 重大傷病證明明細檔         | HV      | 101 | 105 |
+| 18 | 門診費用申請總表主檔       | CT      |  80 | 100 |
+| 20 | 門診費用申請總表主檔       | CT      | 101 | 105 |
+| 22 | 住院費用申請總表主檔       | DT      |  80 | 100 |
+| 23 | 住院費用申請總表主檔       | DT      | 101 | 105 |
+| 25 | 門診處方及治療明細檔       | CD      |  86 |  92 |
+| 30 | 門診處方及治療明細檔       | CD      |  93 | 100 |
+| 35 | 門診處方及治療明細檔       | CD      | 101 | 105 |
+| 41 | 門診處方醫令明細檔         | OO      |  85 |  95 |
+| 43 | 門診處方醫令明細檔         | OO      |  96 | 100 |
+| 46 | 門診處方醫令明細檔         | OO      | 101 | 105 |
+| 50 | 住院醫療費用清單明細檔     | DD      |  85 |  92 |
+| 55 | 住院醫療費用清單明細檔     | DD      |  93 |  95 |
+| 60 | 住院醫療費用清單明細檔     | DD      |  96 | 100 |
+| 65 | 住院醫療費用清單明細檔     | DD      | 101 | 105 |
+| 71 | 住院醫療費用醫令清單明細檔 | DO      |  85 |  95 |
+| 72 | 住院醫療費用醫令清單明細檔 | DO      |  96 |  98 |
+| 74 | 住院醫療費用醫令清單明細檔 | DO      |  99 | 100 |
+| 76 | 住院醫療費用醫令清單明細檔 | DO      | 101 | 105 |
+| 79 | 特約藥局處方及調劑明細檔   | GD      |  85 |  87 |
+| 80 | 特約藥局處方及調劑明細檔   | GD      |  88 |  92 |
+| 82 | 特約藥局處方及調劑明細檔   | GD      |  93 |  98 |
+| 84 | 特約藥局處方及調劑明細檔   | GD      |  99 | 100 |
+| 86 | 特約藥局處方及調劑明細檔   | GD      | 101 | 105 |
+| 88 | 特約藥局處方調劑醫令檔     | GO      |  85 |  95 |
+| 89 | 特約藥局處方調劑醫令檔     | GO      |  96 | 100 |
+| 90 | 特約藥局處方調劑醫令檔     | GO      | 101 | 105 |
+| 91 | 物理治療所調劑明細檔       | GDD     |     |     |
+| 93 | 物理治療所調劑醫令檔       | GOO     |     |     |
+| 94 | 承保資料檔                 | ID      |  80 |  98 |
+| 96 | 承保資料檔                 | ID      |  99 | 105 |
+| 97 | 藥品主檔                   | DRUG    |     |     |
+
+
+
+
+** DONE source block A-1 醫事機構基本資料檔 HOSB
+
+https://www.gnu.org/software/gawk/manual/html_node/Output-Separators.html
+
+awk 'BEGIN { OFS = ";"; ORS = "\n\n" }
+>            { print $1, $2 }' mail-list
+
+awk 'BEGIN { OFS = ", "}{ print $1, $2 }' mail-list
+
+#+NAME: raw_output
+#+HEADERS: :noweb yes
+#+HEADERS: :results raw
+#+HEADERS: :session
+#+BEGIN_SRC sh
+<<the_pdf_name_block>>
+
+# pdftotext -f 4 -l 5 -raw -nopgbrk $the_pdf_filename -
+
+  raw_test=$(pdftotext -f 5 -l 6 -raw -nopgbrk $the_pdf_filename -)
+
+ echo $raw_test
+ echo $raw_test | sed -r 's/( [0-9]{1,2} [A-XZ])/\n\1/g'
+ echo $raw_test | sed -r 's/( [0-9]{1,2} [A-XZ])/\n\1/g' | awk '{print $1, $2, $3, $4, $5, $6, $7, $8$9$10$11$12$13$14$15}'
+# echo $raw_test | sed -r 's/( [0-9]{1,2} [A-XZ])/\n\1/g' | awk ' { OFS = ", "}{print $1, $2, $3, $4, $5, $6, $7, $8$9$10$11$12$13$14$15 }'
+#  echo $raw_test | sed -r 's/[.]{2,}/,/g' | sed -r 's/(A-[0-9]+ )/\1\n/g'
+
+#+END_SRC
+
+
+** DONE source block A-8 醫事人員基本資料檔 PER 
+
+#+NAME: raw_output
+#+HEADERS: :noweb yes
+#+HEADERS: :results raw
+#+HEADERS: :session
+#+BEGIN_SRC sh
+<<the_pdf_name_block>>
+
+# pdftotext -f 12 -l 12 -raw -nopgbrk $the_pdf_filename -
+
+  raw_test=$(pdftotext -f 12 -l 12 -raw -nopgbrk $the_pdf_filename -)
+
+ echo $raw_test
+ echo $raw_test | sed -r 's/( [0-9]{1,2} [A-XZ])/\n\1/g'
+ echo $raw_test | sed -r 's/( [0-9]{1,2} [A-XZ])/\n\1/g' | awk '{print $1, $2, $3, $4, $5, $6, $7, $8$9$10$11$12$13$14$15}'
+# echo $raw_test | sed -r 's/( [0-9]{1,2} [A-XZ])/\n\1/g' | awk ' { OFS = ", "}{print $1, $2, $3, $4, $5, $6, $7, $8$9$10$11$12$13$14$15 }'
+#  echo $raw_test | sed -r 's/[.]{2,}/,/g' | sed -r 's/(A-[0-9]+ )/\1\n/g'
+
+#+END_SRC
+
+
+** DONE source block A-9 專科醫師證書主檔 DOC 
+
+#+NAME: raw_output
+#+HEADERS: :noweb yes
+#+HEADERS: :results raw
+#+HEADERS: :session
+#+BEGIN_SRC sh
+<<the_pdf_name_block>>
+
+# pdftotext -f 12 -l 12 -raw -nopgbrk $the_pdf_filename -
+
+  raw_test=$(pdftotext -f 13 -l 14 -raw -nopgbrk $the_pdf_filename -)
+
+# echo $raw_test
+# echo $raw_test | sed -r 's/( [0-9]{1,2} [A-XZ])/\n\1/g'
+ echo $raw_test | sed -r 's/( [0-9]{1,2} [A-XZ])/\n\1/g' | awk '{print $1, $2, $3, $4, $5, $6, $7, $8$9$10$11$12$13$14$15$16$17$18$19$20$21$22$23$24$25$26$27$28$29$30}'
+# echo $raw_test | sed -r 's/( [0-9]{1,2} [A-XZ])/\n\1/g' | awk ' { OFS = ", "}{print $1, $2, $3, $4, $5, $6, $7, $8$9$10$11$12$13$14$15 }'
+#  echo $raw_test | sed -r 's/[.]{2,}/,/g' | sed -r 's/(A-[0-9]+ )/\1\n/g'
+
+#+END_SRC
+
+
+
+
+
+** DONE source block A-14 重大傷病證明明細檔 HV 
+
+#+NAME: raw_output
+#+HEADERS: :noweb yes
+#+HEADERS: :results raw
+#+HEADERS: :session
+#+BEGIN_SRC sh
+<<the_pdf_name_block>>
+
+# pdftotext -f 12 -l 12 -raw -nopgbrk $the_pdf_filename -
+
+  raw_test=$(pdftotext -f 18 -l 21 -raw -nopgbrk $the_pdf_filename -)
+
+# echo $raw_test
+# echo $raw_test | sed -r 's/( [0-9]{1,2} [A-XZ])/\n\1/g'
+ echo $raw_test | sed -r 's/( [0-9]{1,2} [A-XZ])/\n\1/g' | awk '{print $1, $2, $3, $4, $5, $6, $7, $8$9$10$11$12$13$14$15$16$17$18$19$20$21$22$23$24$25$26$27$28$29$30$31$32$33$34$35$36$37$38$39$40}'
+# echo $raw_test | sed -r 's/( [0-9]{1,2} [A-XZ])/\n\1/g' | awk ' { OFS = ", "}{print $1, $2, $3, $4, $5, $6, $7, $8$9$10$11$12$13$14$15 }'
+#  echo $raw_test | sed -r 's/[.]{2,}/,/g' | sed -r 's/(A-[0-9]+ )/\1\n/g'
+
+#+END_SRC
+
+
+
+
+** DONE source block A-17 執業資料紀錄檔 LIC 
+
+#+NAME: raw_output
+#+HEADERS: :noweb yes
+#+HEADERS: :results raw
+#+HEADERS: :session
+#+BEGIN_SRC sh
+<<the_pdf_name_block>>
+
+# pdftotext -f 18 -l 18 -raw -nopgbrk $the_pdf_filename -
+
+  raw_test=$(pdftotext -f 17 -l 17 -raw -nopgbrk $the_pdf_filename -)
+
+# echo $raw_test
+# echo $raw_test | sed -r 's/( [0-9]{1,2} [A-XZ])/\n\1/g'
+# echo $raw_test | sed -r 's/( [0-9]{1,2} [A-XZ])/\n\1/g' | awk '{print $1, $2, $3, $4, $5, $6, $7, $8$9$10$11$12$13$14$15$16$17$18$19$20$21$22$23$24$25$26$27$28$29$30$31$32$33$34$35$36$37$38$39$40}'
+
+ echo $raw_test | sed -r 's/( [0-9]{1,2} [A-XZ])/\n\1/g' | awk '{print $1, $2, $3, $4, $5, $6, $7, $8$9$10$11$12$13$14$15$16$17$18$19$20$21$22$23$24$25$26$27$28$29$30$31$32$33$34$35$36$37$38$39$40}' | \ sed -r 's/序號英文欄位中文欄位資料型態長度起始位置迄末位置資料描述/\n\n序號 英文欄位 中文欄位 資料型態 長度 起始位置 迄末位置 資料描述/g'
+
+#+END_SRC
+
+
+** DONE source block A-18 門診費用申請總表主檔 CT 
+
+#+NAME: raw_output
+#+HEADERS: :noweb yes
+#+HEADERS: :results raw
+#+HEADERS: :session
+#+BEGIN_SRC sh
+<<the_pdf_name_block>>
+
+# pdftotext -f 18 -l 18 -raw -nopgbrk $the_pdf_filename -
+
+  raw_test=$(pdftotext -f 22 -l 25 -raw -nopgbrk $the_pdf_filename -)
+
+# echo $raw_test
+# echo $raw_test | sed -r 's/( [0-9]{1,2} [A-XZ])/\n\1/g'
+# echo $raw_test | sed -r 's/( [0-9]{1,2} [A-XZ])/\n\1/g' | awk '{print $1, $2, $3, $4, $5, $6, $7, $8$9$10$11$12$13$14$15$16$17$18$19$20$21$22$23$24$25$26$27$28$29$30$31$32$33$34$35$36$37$38$39$40}'
+
+ echo $raw_test | sed -r 's/( [0-9]{1,2} [A-XZ])/\n\1/g' | awk '{print $1, $2, $3, $4, $5, $6, $7, $8$9$10$11$12$13$14$15$16$17$18$19$20$21$22$23$24$25$26$27$28$29$30$31$32$33$34$35$36$37$38$39$40}' | sed -r 's/序號英文欄位中文欄位資料型態長度起始位置迄末位置資料描述/\n\n序號 英文欄位 中文欄位 資料型態 長度 起始位置 迄末位置 資料描述/g'
+
+#+END_SRC
+
+
+
+
+
+
+** DONE source block A-22 住院費用申請總表主檔 DT 
+
+#+NAME: raw_output
+#+HEADERS: :noweb yes
+#+HEADERS: :results raw
+#+HEADERS: :session
+#+BEGIN_SRC sh
+<<the_pdf_name_block>>
+
+# pdftotext -f 18 -l 18 -raw -nopgbrk $the_pdf_filename -
+
+  raw_test=$(pdftotext -f 26 -l 28 -raw -nopgbrk $the_pdf_filename -)
+
+# echo $raw_test
+# echo $raw_test | sed -r 's/( [0-9]{1,2} [A-XZ])/\n\1/g'
+# echo $raw_test | sed -r 's/( [0-9]{1,2} [A-XZ])/\n\1/g' | awk '{print $1, $2, $3, $4, $5, $6, $7, $8$9$10$11$12$13$14$15$16$17$18$19$20$21$22$23$24$25$26$27$28$29$30$31$32$33$34$35$36$37$38$39$40}'
+
+ echo $raw_test | sed -r 's/( [0-9]{1,2} [A-XZ])/\n\1/g' | awk '{print $1, $2, $3, $4, $5, $6, $7, $8$9$10$11$12$13$14$15$16$17$18$19$20$21$22$23$24$25$26$27$28$29$30$31$32$33$34$35$36$37$38$39$40}' | sed -r 's/序號英文欄位中文欄位資料型態長度起始位置迄末位置資料描述/\n\n序號 英文欄位 中文欄位 資料型態 長度 起始位置 迄末位置 資料描述/g'
+
+#+END_SRC
+
+
+
+
+** DONE source block A-25 門診處方及治療明細檔 CD 
+
+（適用 85～92 年資料）
+
+#+HEADERS: :noweb yes
+#+HEADERS: :results raw
+#+HEADERS: :session
+#+BEGIN_SRC sh
+<<the_pdf_name_block>>
+
+  raw_test=$(pdftotext -f 29 -l 33 -raw -nopgbrk $the_pdf_filename -)
+
+# echo $raw_test
+# echo $raw_test | sed -r 's/( [0-9]{1,2} [A-XZ])/\n\1/g'
+# echo $raw_test | sed -r 's/( [0-9]{1,2} [A-XZ])/\n\1/g' | awk '{print $1, $2, $3, $4, $5, $6, $7, $8$9$10$11$12$13$14$15$16$17$18$19$20$21$22$23$24$25$26$27$28$29$30$31$32$33$34$35$36$37$38$39$40}'
+
+ echo $raw_test | sed -r 's/( [0-9]{1,2} [A-XZ])/\n\1/g' | awk '{print $1, $2, $3, $4, $5, $6, $7, $8$9$10$11$12$13$14$15$16$17$18$19$20$21$22$23$24$25$26$27$28$29$30$31$32$33$34$35$36$37$38$39$40}' | sed -r 's/序號英文欄位中文欄位資料型態長度起始位置迄末位置資料描述/\n\n序號 英文欄位 中文欄位 資料型態 長度 起始位置 迄末位置 資料描述/g'
+
+#+END_SRC
+
+（適用 93～100 年資料）
+
+#+HEADERS: :noweb yes
+#+HEADERS: :results raw
+#+HEADERS: :session
+#+BEGIN_SRC sh
+<<the_pdf_name_block>>
+
+  raw_test=$(pdftotext -f 34 -l 38 -raw -nopgbrk $the_pdf_filename -)
+
+# echo $raw_test
+ echo $raw_test | sed -r 's/( [0-9]{1,2} [A-XZ])/\n\1/g'
+# echo $raw_test | sed -r 's/( [0-9]{1,2} [A-XZ])/\n\1/g' | awk '{print $1, $2, $3, $4, $5, $6, $7, $8$9$10$11$12$13$14$15$16$17$18$19$20$21$22$23$24$25$26$27$28$29$30$31$32$33$34$35$36$37$38$39$40}'
+
+# echo $raw_test | sed -r 's/( [0-9]{1,2} [A-XZ])/\n\1/g' | awk '{print $1, $2, $3, $4, $5, $6, $7, $8$9$10$11$12$13$14$15$16$17$18$19$20$21$22$23$24$25$26$27$28$29$30$31$32$33$34$35$36$37$38$39$40}' | sed -r 's/序號英文欄位中文欄位資料型態長度起始位置迄末位置資料描述/\n\n序號 英文欄位 中文欄位 資料型態 長度 起始位置 迄末位置 資料描述/g'
+
+#+END_SRC
+
+
+（適用 101 年以後資料）
+
+#+HEADERS: :noweb yes
+#+HEADERS: :results raw
+#+HEADERS: :session
+#+BEGIN_SRC sh
+<<the_pdf_name_block>>
+
+  raw_test=$(pdftotext -f 39 -l 45 -raw -nopgbrk $the_pdf_filename -)
+
+# echo $raw_test
+ echo $raw_test | sed -r 's/( [0-9]{1,2} [A-XZ])/\n\1/g'
+# echo $raw_test | sed -r 's/( [0-9]{1,2} [A-XZ])/\n\1/g' | awk '{print $1, $2, $3, $4, $5, $6, $7, $8$9$10$11$12$13$14$15$16$17$18$19$20$21$22$23$24$25$26$27$28$29$30$31$32$33$34$35$36$37$38$39$40}'
+
+# echo $raw_test | sed -r 's/( [0-9]{1,2} [A-XZ])/\n\1/g' | awk '{print $1, $2, $3, $4, $5, $6, $7, $8$9$10$11$12$13$14$15$16$17$18$19$20$21$22$23$24$25$26$27$28$29$30$31$32$33$34$35$36$37$38$39$40}' | sed -r 's/序號英文欄位中文欄位資料型態長度起始位置迄末位置資料描述/\n\n序號 英文欄位 中文欄位 資料型態 長度 起始位置 迄末位置 資料描述/g'
+
+#+END_SRC
+       
+
+
+
+** DONE source block A-41 門診處方醫令明細檔 OO 
+
+
+#+HEADERS: :noweb yes
+#+HEADERS: :results raw
+#+HEADERS: :session
+#+BEGIN_SRC sh
+<<the_pdf_name_block>>
+
+  raw_test=$(pdftotext -f 45 -l 53 -raw -nopgbrk $the_pdf_filename -)
+
+# echo $raw_test
+# echo $raw_test | sed -r 's/( [0-9]{1,2} [A-XZ])/\n\1/g'
+# echo $raw_test | sed -r 's/( [0-9]{1,2} [A-XZ])/\n\1/g' | awk '{print $1, $2, $3, $4, $5, $6, $7, $8$9$10$11$12$13$14$15$16$17$18$19$20$21$22$23$24$25$26$27$28$29$30$31$32$33$34$35$36$37$38$39$40}'
+
+ echo $raw_test | sed -r 's/( [0-9]{1,2} [A-XZ])/\n\1/g' | awk '{print $1, $2, $3, $4, $5, $6, $7, $8$9$10$11$12$13$14$15$16$17$18$19$20$21$22$23$24$25$26$27$28$29$30$31$32$33$34$35$36$37$38$39$40}' | sed -r 's/序號英文欄位中文欄位資料型態長度起始位置迄末位置資料描述/\n\n序號 英文欄位 中文欄位 資料型態 長度 起始位置 迄末位置 資料描述/g'
+
+#+END_SRC
+
+
+** source block B, 代碼說明 B
+
+#+HEADERS: :noweb yes
+#+HEADERS: :results raw
+#+HEADERS: :session
+#+BEGIN_SRC sh
+ <<the_pdf_name_block>>
+
+ raw_test=$(pdftotext -f 1 -l 2 -raw -nopgbrk $the_pdf_filename -)
+
+
+
+  echo $raw_test
+  echo $raw_test | sed -r 's/[.]{2,}/|/g'
+  echo $raw_test | sed -r 's/[.]{2,}/|/g' | sed -r 's/([0-9]+ )/\1\n/g'
+
+#+END_SRC
+
+
+** source block B-1, 評鑑等級
+
+#+HEADERS: :noweb yes
+#+HEADERS: :results raw
+#+HEADERS: :session
+#+BEGIN_SRC sh
+ <<the_pdf_name_block>>
+
+ raw_test=$(pdftotext -f 3 -l 4 -nopgbrk -raw $the_pdf_filename -)
+
+#  echo $raw_test | sed -r 's/([0-79][0-9]) /\n\1, /g'
+#  echo $raw_test | sed -r 's/([0-79][0-9]) /\n\1, /g' | sed -r 's/( 8[89] )/,\1/g'
+   echo $raw_test | sed -r 's/([0-79][0-9]) /\n\1, /g' | sed -r 's/( 8[89] )/,\1/g' | sed -r 's/( 評鑑制度 )/,\1/g' 
+
+
+#+END_SRC
+
+
+
+
+
+
+
+ 
+
+** source block B-3, 特約類別
+
+#+HEADERS: :noweb yes
+#+HEADERS: :results raw
+#+HEADERS: :session
+#+BEGIN_SRC sh
+ <<the_pdf_name_block>>
+
+            pdftotext -f 5 -l 5 -nopgbrk -raw $the_pdf_filename -
+
+#+END_SRC
+
+
+
+
+ 
+
+** source block B-4, 權屬別及型態別其代號與名稱
+
+#+HEADERS: :noweb yes
+#+HEADERS: :results raw
+#+HEADERS: :session
+#+BEGIN_SRC sh
+ <<the_pdf_name_block>>
+
+            pdftotext -f 6 -l 10 -nopgbrk -raw $the_pdf_filename -
+
+#+END_SRC
+
+#+RESULTS:
+B-4 權屬別及型態別其代號與名稱
+
+一、醫療機構
+
+| 權屬別 |                              |
+|     01 | 署、市立醫院                 |
+|     02 | 縣市立醫院                   |
+|     04 | 公立醫學院校附設醫院         |
+|     05 | 軍方醫院(民眾診療)           |
+|     06 | 榮民醫院                     |
+|     07 | 機關(構)附設醫院             |
+|     08 | 公立中醫醫院                 |
+|     09 | 社團法人醫院                 |
+|     10 | 宗教社團法人附設醫院         |
+|     11 | 財團法人醫院                 |
+|     12 | 宗教財團法人附設醫院         |
+|     13 | 私立醫學院校附設醫院         |
+|     14 | 其他法人附設醫院             |
+|     15 | 私立醫院                     |
+|     17 | 私立牙醫醫院                 |
+|     18 | 私立中醫院                   |
+|     21 | 市立診所                     |
+|     22 | 縣市立診所                   |
+|     23 | 衛生所                       |
+|     24 | 公立學校附設醫務室           |
+|     25 | 軍方診所(民眾診療附設門診部) |
+|     26 | 榮民診所(榮家醫務室)         |
+|     27 | 機關(構)附設醫務室           |
+|     28 | 公立中醫診所                 |
+|     29 | 公益法人所設診所             |
+|     30 | 公益法人所設醫務室           |
+|     31 | 財團法人附設醫務室           |
+|     32 | 宗教財團法人附設診所、醫務室 |
+|     33 | 私立學校附設醫務室           |
+|     34 | 事業單位附設醫務室           |
+|     35 | 私立診所                     |
+|     37 | 私立牙醫診所                 |
+|     38 | 私立中醫診所                 |
+|     40 | 醫療財團法人診所             |
+|     41 | 醫療社團法人診所             |
+|     42 | 財團法人其他醫療機構         |
+|     45 | 私立其他醫療機構             |
+
+
+|              型態別 |                  |
+|---------------------+------------------|
+|         醫院：01-08 |                  |
+|                  01 | 綜合醫院         |
+|                  02 | 醫院             |
+|                  03 | 專科醫院         |
+|                  04 | 精神科醫院       |
+|                  05 | 特殊科醫院       |
+|                  06 | 慢性醫院         |
+|                  07 | 專科診所         |
+|                  08 | 一般診所(醫務室) |
+|                  09 | 特殊科診所       |
+|---------------------+------------------|
+|         牙醫：11-13 |                  |
+|                  11 | 牙醫醫院         |
+|                 B-5 |                  |
+|                  12 | 牙醫專科診所     |
+|                  13 | 牙醫一般診所     |
+|---------------------+------------------|
+|         中醫：21-24 |                  |
+|                  21 | 中醫綜合醫院     |
+|                  22 | 中醫醫院         |
+|                  23 | 中醫專科診所     |
+|                  24 | 中醫一般診所     |
+|---------------------+------------------|
+| 其他醫療機構：41-43 |                  |
+|                  41 | 捐血中心         |
+|                  42 | 捐血站           |
+|                  43 | 病理中心         |
+
+二、藥商
+
+|            權屬別 |                |
+|-------------------+----------------|
+| 販賣業：51-53、62 |                |
+|                51 | 西藥販賣業     |
+|                52 | 中藥販賣業     |
+|                53 | 醫療器材販賣業 |
+|                62 | 販賣業         |
+|-------------------+----------------|
+| 製造業：54-58、61 |                |
+|                54 | 西藥製造業     |
+|                55 | 中藥製造業     |
+|                56 | 醫療器材製造業 |
+|                57 | 明膠膠囊製造業 |
+|                58 | 化妝品製造業   |
+|                61 | 製造業         |
+|-------------------+----------------|
+|       其他：59-60 |                |
+|                59 | 藥局           |
+|                60 | 列冊中藥商     |
+
+
+
+| 型態別 |                                    |
+|--------+------------------------------------|
+|     01 | 藥師自營                           |
+|     02 | 藥劑生自營                         |
+|     03 | 藥師駐店管理                       |
+|     04 | 藥劑生駐店管理                     |
+|     05 | 符合藥事法104條規定─藥師管理       |
+|     06 | 符合藥事法104條規定─藥劑生管理     |
+|     07 | 中醫師駐店管理                     |
+|     08 | 中醫師兼管                         |
+|     09 | 藥師兼管                           |
+|     11 | 確具中藥基本知識及鑑別能力人員管理 |
+|     12 | 人用生物藥品製造廠                 |
+|     13 | 藥師監製                           |
+|     14 | 中醫師監製                         |
+|     16 | 列冊中藥商                         |
+
+
+三、護理護產機構
+
+
+| 權屬別 |                              |
+|--------+------------------------------|
+|     71 | 公立護產機構                 |
+|     72 | 財團法人護產機構             |
+|     73 | 其他法人附設護產機構         |
+|     74 | 個人開設護產機構             |
+|     75 | 公立醫療機構附設護產機構     |
+|     76 | 私立醫療機構附設護產機構     |
+|     77 | 財團法人醫療機構附設護產機構 |
+|     78 | 其他                         |
+|     79 | 社團法人醫療機構附設護產機構 |
+
+
+| 型態別 |                            |
+|--------+----------------------------|
+|     01 | 護理之家                   |
+|     02 | 居家護理                   |
+|     03 | 產後護理                   |
+|     04 | 助產所                     |
+|     05 | 學校醫務室─校護            |
+|     06 | 事業單位醫務室─廠護        |
+|     07 | 社會福利機構               |
+|     08 | 機關醫護室                 |
+|     09 | 學校護理教育(實習指導老師) |
+|     10 | 日間照護                   |
+|     00 | 其他                       |
+
+
+四、精神復健機構
+
+| 權屬別 |                                  |
+|--------+----------------------------------|
+|     81 | 公立精神復健機構                 |
+|     82 | 財團法人精神復健機構             |
+|     83 | 其他法人附設精神復健機構         |
+|     84 | 私立精神復健機構                 |
+|     85 | 公立醫療機構附設精神復健機構     |
+|     86 | 私立醫療機構附設精神復健機構     |
+|     87 | 財團法人醫療機構附設精神復健機構 |
+|     88 | 精神衛生團體附設精神復健機構     |
+
+
+| 型態別 |              |
+|--------+--------------|
+|     08 | 社區復健中心 |
+|     09 | 康復之家     |
+
+
+
+五、其他醫事機構
+
+| 權屬別 |                                  |
+|--------+----------------------------------|
+|     91 | 公立其他醫事機構                 |
+|     92 | 財團法人其他醫事機構             |
+|     93 | 其他法人附設其他醫事機構         |
+|     94 | 私立其他醫事機構                 |
+|     95 | 公立醫療機構附設其他醫事機構     |
+|     96 | 私立醫療機構附設其他醫事機構     |
+|     97 | 財團法人醫療機構附設其他醫事機構 |
+|     98 | 其他                             |
+|     xx | 不詳                             |
+
+
+
+| 型態別 |                    |
+|--------+--------------------|
+|     01 | 醫事檢驗所         |
+|     02 | 醫事放射所         |
+|     03 | 物理治療所         |
+|     04 | 職能治療所         |
+|     05 | 鑲牙所             |
+|     06 | 齒模製造技術員     |
+|     07 | 國術損傷接骨技術員 |
+|     00 | 其他               |
+|     xx | 不詳               |
+
+
+
+** source block B-53 專科醫師代號、科別
+
+#+HEADERS: :noweb yes
+#+HEADERS: :results raw
+#+HEADERS: :session
+#+BEGIN_SRC sh
+#  the_pdf_filename="en_codeformat.pdf"  #A
+ the_pdf_filename="en_codedescribe.pdf"  #B
+
+            pdftotext -f 55 -l 56 -nopgbrk -raw $the_pdf_filename -
+
+#+END_SRC
+
+#+RESULTS:
+B-53
+專科醫師代號、科別
+| 代號         | 專科別           |
+| A0100        | 家庭醫學科       |
+| A0200        | 內科             |
+| A0201        | 心臟專科         |
+| A0202        | 腎臟科           |
+| A0203        | 胸腔暨重症專科   |
+| A0204        | 心臟外專科       |
+| A0205        | 心臟血管外科     |
+| A0206        | 胸腔外科         |
+| A0207        | 結核病專科       |
+| A0208        | 感染症專科       |
+| A02AA        | 新陳代謝科       |
+| A0299        | 職業病科         |
+| A0300        | 外科             |
+| A0301        | 整形外科         |
+| A0400        | 小兒科           |
+| A0500        | 婦產科           |
+| A0600        | 骨科             |
+| A0700        | 神經科           |
+| A0800        | 神經外科         |
+| A0900        | 泌尿科           |
+| A1000        | 耳鼻喉科         |
+| A1100        | 眼科             |
+| A1200        | 皮膚科           |
+| A1300        | 精神科           |
+| A1400        | 復健科           |
+| A1500        | 麻醉科           |
+| A1600        | 放射線科（診斷） |
+| A1610        | 放射線科（腫瘤） |
+| A1620        | 放射線科（核醫） |
+| A2000        | 病理科（解剖）   |
+| A2010        | 病理科（臨床）   |
+| A2100        | 核子醫學科       |
+| A0299        | 職業病科         |
+| A2200        | 急診醫學科       |
+| A2400        | 職業醫學科       |
+| A2500        | 口腔顎面外科     |
+| C0700        | 口腔顎面外科     |
+| B0100        | 中醫內科         |
+| B0200        | 中醫外科         |
+| B0300        | 中醫婦科         |
+| B0400        | 中醫兒科         |
+| B0600        | 中醫眼科         |
+| C0100        | 牙科不分科       |
+| C0900        | 口腔病理科       |
+
+
+
+
+** man pdftotext
+
+pdftotext [options] [PDF-file [text-file]]
+
+
+Options
+
+-f number
+    Specifies the first page to convert.
+
+-l number
+    Specifies the last page to convert.
+
+-layout
+    Maintain (as best as possible) the original physical layout of the text. The default is to 'undo' physical layout (columns, hyphenation, etc.) and output the text in reading order.
+
+-raw
+    Keep the text in content stream order.  This is a hack which often "undoes" column formatting, etc.  Use of raw mode is no longer recommended.
+
+
+
+
+
+ 
+
+
+
+** DONE source block A-0-20 A-??, the last-2-digit, grep cut
+
+#+HEADERS: :noweb yes
+#+HEADERS: :results raw
+#+HEADERS: :session
+#+BEGIN_SRC sh
+<<the_pdf_name_block>>
+
+# pdftotext -f 1 -l 3 -raw -nopgbrk $the_pdf_filename -
+
+# pdftotext -f 1 -l 5 -raw $the_pdf_filename - | grep -E '[.]{3,} A-' 
+
+ pdftotext -f 1 -l 5 -raw $the_pdf_filename - | grep -E 'A-[0-9]+$' | cut -d"-" -f2
+
+#+END_SRC
+
+#+RESULTS:
+1
+3
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+20
+22
+23
+25
+30
+35
+41
+43
+46
+50
+55
+60
+65
+71
+72
+74
+76
+79
+80
+82
+84
+86
+88
+89
+90
+91
+93
+94
+96
+97
+
+
+** DONE source block A-0-21 A-??, the last-2-digit, sed
+#+HEADERS: :results raw
+
+#+HEADERS: :noweb yes
+#+HEADERS: :session
+#+BEGIN_SRC sh
+<<the_pdf_name_block>>
+
+# pdftotext -f 1 -l 3 -raw -nopgbrk $the_pdf_filename -
+
+# pdftotext -f 1 -l 5 -raw $the_pdf_filename - | grep -E 'A-[0-9]+$' | cut -d"-" -f2
+
+ pdftotext -f 1 -l 5 -raw $the_pdf_filename - | sed -nr 's:.+A-([0-9]+)$:\1:p'
+
+#+END_SRC
+
+
+
+** DONE source block A-0-25 table 2-column  sed
+
+#+HEADERS: :results raw
+#+HEADERS: :noweb yes
+#+HEADERS: :session
+#+BEGIN_SRC sh
+<<the_pdf_name_block>>
+
+# pdftotext -f 1 -l 3 -raw -nopgbrk $the_pdf_filename -
+
+# pdftotext -f 1 -l 5 -raw $the_pdf_filename - | grep -E 'A-[0-9]+$' | cut -d"-" -f2
+
+ pdftotext -f 1 -l 5 -raw $the_pdf_filename - | sed -nr 's:([^.]+)[.]{5,}[ ]?A-([0-9]+)$:|\1|\2|:p'
+
+#+END_SRC
+
+
+** DONE source block A-0-27 table 3-column  sed
+
+#+HEADERS: :results raw
+#+HEADERS: :noweb yes
+#+HEADERS: :session
+#+BEGIN_SRC sh
+<<the_pdf_name_block>>
+
+ pdftotext -f 1 -l 3 -raw -nopgbrk $the_pdf_filename - | head
+
+# pdftotext -f 1 -l 5 -raw $the_pdf_filename - | grep -E 'A-[0-9]+$' | cut -d"-" -f2
+
+# pdftotext -f 1 -l 5 -raw $the_pdf_filename - | sed -nr 's:([^.]+)[.]{5,}[ ]?A-([0-9]+)$:|\1|\2|:p'
+
+
+echo "
+
+s:[.]{3,}:: 
+s:(.*)A-([0-9]{1,2}):\2 \1:
+s:（: :   
+s:）: :
+s:\[適用 : :
+s:([0-9]{2,3})～([0-9]{2,3})(.*): \1 \2:
+s:([0-9]{2,3})~([0-9]{2,3})(.*): \1 \2:
+s:([0-9]{2,3})( 年以後資料]):\1 105:
+s:([0-9]{2,3})( 年以前資料]): 80 \1:
+s:[ ]+:|:g
+# s:^[A-Z].*+::g
+
+" > temporary_script_for_sed
+
+# cat temporary_script_for_sed
+
+pdftotext -f 1 -l 3 -nopgbrk -raw $the_pdf_filename - | sed -rf temporary_script_for_sed
+
+rm temporary_script_for_sed
+#+END_SRC
+
+#+RESULTS:
+A-I V.102-11
+目 錄
+第一部份：檔案格式及資料描述
+醫事機構基本資料檔（HOSB）................................................................. A-1
+醫事機構副檔資料檔（HOSX）................................................................. A-3
+醫事機構服務項目檔（HOX）................................................................... A-5
+醫事機構診療科別明細檔（DETA） ......................................................... A-6
+醫事機構病床主檔（BED）........................................................................ A-7
+醫事人員基本資料檔（PER） .................................................................... A-8
+專科醫師證書主檔（DOC）[適用 86～100 年資料] ................................ A-9
+A-I|V.102-11
+目|錄
+第一部份：檔案格式及資料描述
+1|醫事機構基本資料檔|HOSB|
+3|醫事機構副檔資料檔|HOSX|
+5|醫事機構服務項目檔|HOX|
+6|醫事機構診療科別明細檔|DETA|
+7|醫事機構病床主檔|BED|
+8|醫事人員基本資料檔|PER|
+9|專科醫師證書主檔|DOC|86|100
+10|專科醫師證書主檔|DOC|101|105|
+11|評鑑資料檔|HOSP_GRAD|
+12|醫事機構類別明細檔|HOSTDTL|
+13|執業資料紀錄檔|LIC|
+14|重大傷病證明明細檔|HV|85|93
+15|重大傷病證明明細檔|HV|94|98
+16|重大傷病證明明細檔|HV|99|100
+17|重大傷病證明明細檔|HV|101|105|
+18|門診費用申請總表主檔|CT|80|100|
+V.102-11|A-II
+20|門診費用申請總表主檔|CT|101|105|
+22|住院費用申請總表主檔|DT|80|100|
+23|住院費用申請總表主檔|DT|101|105|
+25|門診處方及治療明細檔|CD|86|92
+30|門診處方及治療明細檔|CD|93|100
+35|門診處方及治療明細檔|CD|101|105|
+41|門診處方醫令明細檔|OO|85|95
+43|門診處方醫令明細檔|OO|96|100
+46|門診處方醫令明細檔|OO|101|105|
+50|住院醫療費用清單明細檔|DD|85|92
+55|住院醫療費用清單明細檔|DD|93|95
+60|住院醫療費用清單明細檔|DD|96|100
+65|住院醫療費用清單明細檔|DD|101|105|
+71|住院醫療費用醫令清單明細檔|DO|85|95
+72|住院醫療費用醫令清單明細檔|DO|96|98
+74|住院醫療費用醫令清單明細檔|DO|99|100
+76|住院醫療費用醫令清單明細檔|DO|101|105|
+79|特約藥局處方及調劑明細檔|GD|85|87
+80|特約藥局處方及調劑明細檔|GD|88|92
+A-III|V.102-11
+82|特約藥局處方及調劑明細檔|GD|93|98
+84|特約藥局處方及調劑明細檔|GD|99|100
+86|特約藥局處方及調劑明細檔|GD|101|105|
+88|特約藥局處方調劑醫令檔|GO|85|95
+89|特約藥局處方調劑醫令檔|GO|96|100
+90|特約藥局處方調劑醫令檔|GO|101|105|
+91|物理治療所調劑明細檔|GDD|
+93|物理治療所調劑醫令檔|GOO|
+94|承保資料檔|ID|80|98|
+96|承保資料檔|ID|99|105|
+97|藥品主檔|DRUG|
+※本譯碼簿僅供參考，資料描述或代碼說明資訊如有異動，請逕自全民健康保險
+署網站|http://www.nhi.gov.tw/|查閱。
+
+
+** DONE source block A-41 line
+
+
+#+HEADERS: :results raw
+#+HEADERS: :noweb yes
+#+HEADERS: :session
+#+BEGIN_SRC sh
+<<the_pdf_name_block>>
+
+# pdftotext -f 1 -l 3 -raw -nopgbrk $the_pdf_filename - | head
+
+
+cmc_f=1        # first page number to parse
+
+cmc_l=2        # last page number to parse
+
+echo "
+
+:A-41:=
+
+" > temporary_script_for_sed
+
+# cat temporary_script_for_sed
+
+# pdftotext -f $cmc_f -l $cmc_l -nopgbrk -raw $the_pdf_filename - # | sed -rf temporary_script_for_sed
+
+# pdftotext -nopgbrk -raw $the_pdf_filename -  | sed -nf temporary_script_for_sed
+
+pdftotext -nopgbrk -raw $the_pdf_filename -  | sed -n '/A-43/='
+
+rm temporary_script_for_sed
+#+END_SRC
+
+#+RESULTS:
+28
+1836
+
+
+* A-0
+
+
+** DONE source test
+
+
+#+HEADERS: :results raw
+#+HEADERS: :noweb yes
+#+HEADERS: :session
+#+BEGIN_SRC sh
+
+# echo -e 'LineA\nLineB' 
+
+# echo -e 'LineA\nLineB\nLineC\nLineD' | sed -e 'N' -e 's/\n/+/'
+ echo -e 'LineA\nLineB\nLineC' | sed -e 'N' -e 's/\n/+/'
+
+
+
+#+END_SRC
+
+#+RESULTS:
+LineA+LineB
+LineC
+
+
+
+* A-?? ~ A-??
+
+** DONE source block sed page A-??-??
+
+#+HEADERS: :results raw
+#+HEADERS: :noweb yes
+#+HEADERS: :session
+#+BEGIN_SRC sh
+
+
+the_file=en_codeformat.txt
+A_f=20   # first page of A-?? to parse
+A_l=22   # last page of A-?? to parse
+echo "
+
+# 1,/A-97/ d  # delete table of contexts, optional
+
+# 1,/A-$A_f/ d   # delete lines before A_f
+
+# /A-$A_l/,$ d   # delete lines after A_l
+
+/A-$A_f/,/A-$A_l/ !d   # delete lines outside A_f A_l 
+
+# 1,3 l  # failed, only print the first line.
+# 1,+3 l
+# 1,+3 p
+
+ p 
+# /A-/ p
+# p
+" > temporary_script_for_sed
+
+
+cat $the_file | sed -nrf temporary_script_for_sed
+
+rm temporary_script_for_sed
+
+# echo "This is the 123" $A_f "456"
+# echo "This is the 123"$A_f"456"
+# echo "This is the 123"${A_f}"456"
+#+END_SRC
+
+
+** DONE source block test
+
+#+HEADERS: :results raw
+#+HEADERS: :noweb yes
+#+HEADERS: :session
+#+BEGIN_SRC sh
+
+# failed, non-interactive
+
+awk '{print $1*$2}' -
+
+#+END_SRC
+
+#+RESULTS:
+
