@@ -1296,9 +1296,67 @@ rm temporary_script_for_sed
 # echo "This is the 123"${A_f}"456"
 #+END_SRC
 
+** DONE source block awk test 2
+
+#+HEADERS: :results raw
+#+HEADERS: :noweb yes
+#+HEADERS: :session
+#+BEGIN_SRC sh
+
+LC_ALL=C 
+echo "
+/li/ {print  $1}
+" > temporary_script_for_awk
+
+awk -f temporary_script_for_awk mail-list
+
+rm temporary_script_for_awk
+#+END_SRC
+
+#+RESULTS:
+Amelia       555-5553     amelia.zodiacusque@gmail.com    F
+Broderick    555-0542     broderick.aliquotiens@yahoo.com R
+Julie        555-6699     julie.perscrutabor@skeeve.com   F
+Samuel       555-3430     samuel.lanceolis@shu.edu        A
+Amelia       555-5553     amelia.zodiacusque@gmail.com    F
+Broderick    555-0542     broderick.aliquotiens@yahoo.com R
+Julie        555-6699     julie.perscrutabor@skeeve.com   F
+Samuel       555-3430     samuel.lanceolis@shu.edu        A
 
 
-** DONE source block awk page A-??-??
+** DONE source block awk test
+
+#+HEADERS: :results raw
+#+HEADERS: :noweb yes
+#+HEADERS: :session
+#+BEGIN_SRC sh
+
+echo '
+
+#/Am/,/Jul/ { print $2, $4, NR, NF }  # works
+
+/An/,/ll/ { print $2, $4, NR, NF }
+
+' > awk_script_1  # works
+
+# echo '/Am/,/Jul/ { print $2, $4 }' > awk_script_1  # works
+
+# awk '/Am/,/Jul/ { print $2, $4 }' mail-list    # works
+
+awk -f awk_script_1 mail-list
+
+rm awk_script_1
+
+
+#+END_SRC
+
+#+RESULTS:
+555-3412 A 2 4
+555-7685 A 3 4
+555-1675 A 4 4
+
+
+** DONE source block awk single qoute succeeds
 
 #+HEADERS: :results raw
 #+HEADERS: :noweb yes
@@ -1309,44 +1367,31 @@ rm temporary_script_for_sed
 the_file=en_codeformat.txt
 
 A_f=20   # first page of A-?? to parse
-A_l=23   # last page of A-?? to parse
+A_l=22   # last page of A-?? to parse
 
-echo "
-# /A-21/,/A-23/ {print NF, NR, $0}
-/A-$A_f/,/A-$A_l/
-" > temporary_script_for_awk
+echo '  # works
 
-awk -f temporary_script_for_awk $the_file
+# /A-20/,/A-23/   # works
+# /A-20/,/A-23/  { print $2, $4, NR, NF }  # works
+# /A-'$A_f'/,/A-'$A_l'/  # works
+ /A-'$A_f'/,/A-'$A_l'/  { print $2, $4}  # works  "a shell here-is document"
+# /A-"$A_f"/,/A-"$A_l"/  { print $2, $4}  # fails, extra double qoute in awk_script
 
-rm temporary_script_for_awk
-#+END_SRC
+# /A-$A_f/,/A-$A_l/  { print $2, $4}  # fails, variables A_f, A_l do not expand
 
+' > awk_script
 
-** DONE source block awk test
+cat awk_script
 
-#+HEADERS: :results raw
-#+HEADERS: :noweb yes
-#+HEADERS: :session
-#+BEGIN_SRC sh
+awk -f awk_script $the_file
 
-awk '{ print $2 }' mail-list
-
+rm awk_script
 #+END_SRC
 
 #+RESULTS:
-555-5553
-555-3412
-555-7685
-555-1675
-555-0542
-555-2912
-555-1234
-555-6699
-555-6480
-555-3430
-555-2127
 
-** DONE source block awk test 2
+
+** DONE source block awk double qoute succeeds
 
 #+HEADERS: :results raw
 #+HEADERS: :noweb yes
@@ -1354,26 +1399,138 @@ awk '{ print $2 }' mail-list
 #+BEGIN_SRC sh
 
 
+the_file=en_codeformat.txt
+
+A_f=20   # first page of A-?? to parse
+A_l=22   # last page of A-?? to parse
+
 echo "
-#/li/ { print $2 }
-{print $2 }
-" > temporary_script_for_awk
 
-awk -f temporary_script_for_awk mail-list
+# /A-20/,/A-23/   # works
+# /A-20/,/A-23/  { print $2, $4, NR, NF }  # works
+# /A-'$A_f'/,/A-'$A_l'/  # works
+# /A-'$A_f'/,/A-'$A_l'/  { print $2, $4}  # fails
+ /A-$A_f/,/A-$A_l/ {print \$4}  # works  "a shell here-is document"
+# /A-$A_f/,/A-$A_l/ {print '$2', '$4'}  # fails, empty in single qoute
+# /A-'$A_f'/,/A-'$A_l'/ {print \$2, \$4}  # fails, extra single qoute in awk_script
+# /A-"$A_f"/,/A-"$A_l"/  { print $2, $4}  # fails
 
-rm temporary_script_for_awk
+" > awk_script
+
+cat awk_script
+
+awk -f awk_script $the_file
+
+rm awk_script
 #+END_SRC
 
 #+RESULTS:
-Amelia       555-5553     amelia.zodiacusque@gmail.com    F
-Anthony      555-3412     anthony.asserturo@hotmail.com   A
-Becky        555-7685     becky.algebrarum@gmail.com      A
-Bill         555-1675     bill.drowning@hotmail.com       A
-Broderick    555-0542     broderick.aliquotiens@yahoo.com R
-Camilla      555-2912     camilla.infusarum@skynet.be     R
-Fabius       555-1234     fabius.undevicesimus@ucb.edu    F
-Julie        555-6699     julie.perscrutabor@skeeve.com   F
-Martin       555-6480     martin.codicibus@hotmail.com    A
-Samuel       555-3430     samuel.lanceolis@shu.edu        A
-Jean-Paul    555-2127     jeanpaul.campanorum@nyu.edu     R 
+
+
+# /A-20/,/A-23/   # works
+# /A-20/,/A-23/  { print , , NR, NF }  # works
+# /A-'20'/,/A-'22'/  # works
+# /A-'20'/,/A-'22'/  { print , }  # fails
+ /A-20/,/A-22/ {print $4}  # works  a shell here-is document
+# /A-20/,/A-22/ {print '', ''}  # fails, empty in single qoute
+# /A-'20'/,/A-'22'/ {print $2, $4}  # fails, extra single qoute in awk_script
+# /A-20/,/A-22/  { print , }  # fails
+
+
+........................
+A-22
+
+CT
+391
+
+
+
+
+
+
+
+
+
+
+C
+C
+C
+
+
+
+
+
+C
+C
+
+
+
+
+N
+N
+N
+
+
+N
+N
+
+N
+N
+
+N
+N
+N
+N
+N
+N
+N
+N
+N
+N
+
+
+
+CT
+391
+
+
+
+
+
+
+
+
+
+
+N
+N
+N
+N
+N
+N
+
+
+N
+
+
+
+N
+N
+N
+
+
+330
+N
+
+N
+N
+N
+N
+
+
+N
+
+
+
+
 
