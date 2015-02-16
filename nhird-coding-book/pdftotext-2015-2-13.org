@@ -1410,127 +1410,50 @@ echo "
 # /A-20/,/A-23/  { print $2, $4, NR, NF }  # works
 # /A-'$A_f'/,/A-'$A_l'/  # works
 # /A-'$A_f'/,/A-'$A_l'/  { print $2, $4}  # fails
- /A-$A_f/,/A-$A_l/ {print \$4}  # works  "a shell here-is document"
+ /A-$A_f/,/A-$A_l/ # {print \$1}  # works  "a shell here-is document"
 # /A-$A_f/,/A-$A_l/ {print '$2', '$4'}  # fails, empty in single qoute
 # /A-'$A_f'/,/A-'$A_l'/ {print \$2, \$4}  # fails, extra single qoute in awk_script
 # /A-"$A_f"/,/A-"$A_l"/  { print $2, $4}  # fails
 
 " > awk_script
 
-cat awk_script
+ cat awk_script
 
 awk -f awk_script $the_file
 
 rm awk_script
 #+END_SRC
 
-#+RESULTS:
 
 
-# /A-20/,/A-23/   # works
-# /A-20/,/A-23/  { print , , NR, NF }  # works
-# /A-'20'/,/A-'22'/  # works
-# /A-'20'/,/A-'22'/  { print , }  # fails
- /A-20/,/A-22/ {print $4}  # works  a shell here-is document
-# /A-20/,/A-22/ {print '', ''}  # fails, empty in single qoute
-# /A-'20'/,/A-'22'/ {print $2, $4}  # fails, extra single qoute in awk_script
-# /A-20/,/A-22/  { print , }  # fails
+** source block awk double qoute succeeds
+
+#+HEADERS: :results raw
+#+HEADERS: :noweb yes
+#+HEADERS: :session
+#+BEGIN_SRC sh
 
 
-........................
-A-22
+the_file=en_codeformat.txt
 
-CT
-391
+A_f=20   # first page of A-?? to parse
+A_l=22   # last page of A-?? to parse
 
+echo "
 
+# /A-$A_f/,/A-$A_l/ # {}# {print \$1}  # works  "a shell here-is document"
+# /A-$A_f/,/A-$A_l/ {}# {print \$1}  # works  "a shell here-is document"
+# /A-$A_f/ 
+# /A-$A_l/
 
+# /A-$A_f/,/A-$A_l/ 
 
+/^[0-9]{1,2} [A-Z0-9_]{4,} /
+" > awk_script
 
+# cat awk_script
 
+awk -f awk_script $the_file
 
-
-
-
-C
-C
-C
-
-
-
-
-
-C
-C
-
-
-
-
-N
-N
-N
-
-
-N
-N
-
-N
-N
-
-N
-N
-N
-N
-N
-N
-N
-N
-N
-N
-
-
-
-CT
-391
-
-
-
-
-
-
-
-
-
-
-N
-N
-N
-N
-N
-N
-
-
-N
-
-
-
-N
-N
-N
-
-
-330
-N
-
-N
-N
-N
-N
-
-
-N
-
-
-
-
-
+rm awk_script
+#+END_SRC
